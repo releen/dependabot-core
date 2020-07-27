@@ -42,7 +42,7 @@ RSpec.describe "kiln integration" do
 
   let(:github_credentials) { credentials }
   let(:repo_name) { "releen/kiln-fixtures" }
-  let(:branch) { "master" }
+  let(:branch) { "main" }
   let(:directory) { "/bosh/" }
   let(:dependency_name) { "uaa" }
   let(:package_manager) { "kiln" }
