@@ -1,23 +1,32 @@
 # frozen_string_literal: true
 
 require "find"
+require "bundler"
 
 Gem::Specification.new do |spec|
   common_gemspec =
-    Bundler.load_gemspec_uncached("../common/dependabot-common.gemspec")
+      Bundler.load_gemspec_uncached("../common/dependabot-common.gemspec")
 
-  spec.name         = "dependabot-kiln"
-  spec.summary      = "Kiln support for dependabot"
-  spec.version      = common_gemspec.version
-  spec.description  = common_gemspec.description
+  spec.name = "dependabot-kiln"
+  spec.summary = "Kiln support for dependabot"
+  spec.version = common_gemspec.version
+  spec.description = common_gemspec.description
 
-  spec.author       = common_gemspec.author
-  spec.email        = common_gemspec.email
-  spec.homepage     = common_gemspec.homepage
-  spec.license      = common_gemspec.license
+  spec.author = common_gemspec.author
+  spec.email = common_gemspec.email
+  spec.homepage = common_gemspec.homepage
+  spec.license = common_gemspec.license
 
   spec.require_path = "lib"
-  spec.files        = []
+  spec.files = ["lib/dependabot-kiln.rb",
+                "lib/dependabot/kiln/file_fetcher.rb",
+                "lib/dependabot/kiln/file_parser.rb",
+                "lib/dependabot/kiln/file_updater.rb",
+                "lib/dependabot/kiln/helpers.rb",
+                "lib/dependabot/kiln/metadata_finder.rb",
+                "lib/dependabot/kiln/requirement.rb",
+                "lib/dependabot/kiln/update_checker.rb",
+                "lib/dependabot/kiln/version.rb"]
 
   spec.required_ruby_version = common_gemspec.required_ruby_version
   spec.required_rubygems_version = common_gemspec.required_ruby_version
@@ -28,18 +37,4 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency dep.name, dep.requirement.to_s
   end
 
-  next unless File.exist?("../.gitignore")
-
-  ignores = File.readlines("../.gitignore").grep(/\S+/).map(&:chomp)
-
-  next unless File.directory?("lib") && File.directory?("helpers")
-
-  prefix = "/" + File.basename(File.expand_path(__dir__)) + "/"
-  Find.find("lib", "helpers") do |path|
-    if ignores.any? { |i| File.fnmatch(i, prefix + path, File::FNM_DOTMATCH) }
-      Find.prune
-    else
-      spec.files << path unless File.directory?(path)
-    end
-  end
 end

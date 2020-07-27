@@ -1,19 +1,7 @@
 # This script is designed to loop through all dependencies in a GHE, GitLab or
 # Azure DevOps project, creating PRs where necessary.
 
-require "dependabot/pull_request_creator"
-require "dependabot/kiln/file_fetcher"
-require "dependabot/kiln/file_parser"
-require "dependabot/kiln/update_checker"
-require "dependabot/kiln/file_updater"
-require "dependabot/file_fetchers"
-require "dependabot/file_parsers"
-require "dependabot/update_checkers"
-require "dependabot/file_updaters"
-require "dependabot/pull_request_creator"
-require "dependabot/kiln/version"
-require "dependabot/kiln/requirement"
-require "dependabot/kiln/metadata_finder"
+require "dependabot-kiln"
 
 # Full name of the repo you want to create pull requests for.
 repo_name = ENV["DEPENDABOT_TARGET_REPO"] # pivotal-cf/p-runtime
