@@ -8,42 +8,56 @@ require_common_spec "file_updaters/shared_examples_for_file_updaters"
 
 RSpec.describe Dependabot::Vendir::FileUpdater do
   # it_behaves_like "a dependency file updater"
+
   let(:updater) do
     described_class.new(
-        dependencies: dependencies,
-        dependency_files: dependency_files,
-        credentials: credentials,
+      dependencies: [dependency],
+      dependency_files: [],
+      credentials: credentials
     )
   end
-
+  let(:files) { [vendir_yml, vendir_lock_yml] }
   let(:credentials) do
     [{
-         "type" => "git_source",
-         "host" => "github.com",
-         "username" => "x-access-token",
-         "password" => "token"
-     }]
+      "type" => "git_source",
+      "host" => "github.com",
+      "username" => "x-access-token",
+      "password" => "token"
+    }]
   end
-  let(:dependency_files) { [] }
-  let(:dependencies) { [dependency] }
-  let(:dependency) do
-    Dependency.new(
-        name: "config/_ytt_lib/github.com/cloudfoundry/cf-k8s-networking",
-        version: "4153bbdbaf3e8d3d681a84a112f3c9cc10129ff3",
-        requirements: [{
-                           requirement: "v0.0.6",
-                           groups: [],
-                           source: {
-                               type: "git",
-                               branch: "v0.0.6",
-                               url: "https://github.com/cloudfoundry/cf-k8s-networking",
-                           },
-                           file: vendir_yml.path,
-                       }],
-        package_manager: "vendir"
+  let(:vendir_yml) do
+    Dependabot::DependencyFile.new(
+      name: "vendir.yml",
+      content: vendir_yml_content
     )
   end
-
+  let(:vendir_yml_content) { fixture("vendir_ymls", vendir_yml_fixture_name) }
+  let(:vendir_yml_fixture_name) { "vendir.yml" }
+  let(:vendir_lock_yml) do
+    Dependabot::DependencyFile.new(
+      name: "vendir.lock.yml",
+      content: vendir_lock_yml_content
+    )
+  end
+  let(:vendir_lock_yml_content) { fixture("vendir_lock_ymls", vendir_lock_yml_fixture_name) }
+  let(:vendir_lock_yml_fixture_name) { "vendir.lock.yml" }
+  let(:dependency) do
+    Dependabot::Dependency.new(
+      name: "config/_ytt_lib/github.com/cloudfoundry/cf-k8s-networking",
+      version: "4153bbdbaf3e8d3d681a84a112f3c9cc10129ff3",
+      requirements: [{
+        requirement: "v0.0.6",
+        groups: [],
+        source: {
+          type: "git",
+          branch: "v0.0.6",
+          url: "https://github.com/cloudfoundry/cf-k8s-networking"
+        },
+        file: vendir_yml_fixture_name
+      }],
+      package_manager: "vendir"
+    )
+  end
 
   describe "#updated_dependency_files" do
     subject(:updated_files) { updater.updated_dependency_files }
