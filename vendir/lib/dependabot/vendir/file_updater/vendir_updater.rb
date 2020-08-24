@@ -31,7 +31,7 @@ module Dependabot
         def updated_files
             @updated_files ||= update_files
         end
-  
+
         # rubocop:disable Metrics/AbcSize
         def update_files
             SharedHelpers.in_a_temporary_directory do |path|
@@ -45,7 +45,7 @@ module Dependabot
                 end
 
                 command = "vendir sync"
-  
+
                 _, stderr, status = Open3.capture3(command)
                 handle_vendir_sync_error(path, stderr) unless status.success?
 
@@ -57,7 +57,7 @@ module Dependabot
                 # In such cases, retrying (a maximum of 3 times) may fix it.
                 retry_count ||= 0
                 raise if retry_count >= 3
-  
+
                 retry_count += 1
                 retry
               end
